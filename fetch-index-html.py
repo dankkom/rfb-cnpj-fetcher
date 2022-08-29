@@ -29,7 +29,7 @@ def main():
     args = get_args()
     datadir = args.datadir
 
-    datadir.parent.mkdir(parents=True, exist_ok=True)
+    datadir.mkdir(parents=True, exist_ok=True)
 
     html = collect.get_file(URL)
     links = scraper.scrape_index(html.decode("utf-8"))

@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 def get_file(url) -> bytes:
     with httpx.stream("GET", url, verify=False) as r:
-        return r.read().content
+        return r.read()
 
 
 def download_file(url) -> bytes:
