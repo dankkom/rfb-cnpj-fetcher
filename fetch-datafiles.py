@@ -32,7 +32,11 @@ def main():
             try:
                 download_file(file, datadir, client)
                 break
-            except (httpx.NetworkError, httpx.ReadTimeout) as e:
+            except (
+                httpx.NetworkError,
+                httpx.TimeoutException,
+                httpx.ProtocolError,
+            ) as e:
                 print(f"Error {e}")
 
     client.close()
