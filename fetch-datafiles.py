@@ -1,8 +1,12 @@
+import datetime
 import argparse
 import json
 from pathlib import Path
 
+import httpx
+
 from rfb_cnpj.collect import download_file
+from rfb_cnpj.storage import get_filename
 
 
 def get_args():
@@ -21,14 +25,17 @@ def main():
     with open(datadir / "index.json", "r", encoding="utf-8") as f:
         index = json.load(f)
 
-    for filename in index:
-        destfilepath = datadir / filename
-        if destfilepath.exists():
-            continue
-        print(filename)
-        with open(datadir / filename, "wb") as f:
-            for chunk in download_file(index[filename]["href"]):
-                f.write(chunk)
+    client = httpx.Client(verify=False, timeout=60)
+
+    for file in index:
+        while True:
+            try:
+                download_file(file, datadir, client)
+                break
+            except (httpx.NetworkError, httpx.ReadTimeout) as e:
+                print(f"Error {e}")
+
+    client.close()
 
 
 if __name__ == "__main__":
