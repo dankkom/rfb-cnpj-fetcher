@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "rfb-cnpj"
+name = "rfb-cnpj-fetcher"
 version = "0.1.0"
 description = "Dados CNPJ Receita Federal do Brasil"
 authors = ["Daniel Komesu <danielkomesu@gmail.com>"]
@@ -11,8 +11,6 @@ httpx = "^0.23.0"
 lxml = "^4.9.0"
 tqdm = "^4.64.0"
 
-[tool.poetry.dev-dependencies]
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
