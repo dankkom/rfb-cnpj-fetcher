@@ -1,3 +1,5 @@
 # Dados CNPJ Receita Federal do Brasil
 
-Fonte: https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/cadastros/consultas/dados-publicos-cnpj
+https://dados.gov.br/dados/conjuntos-dados/cadastro-nacional-da-pessoa-juridica---cnpj
+
+https://dadosabertos.rfb.gov.br/CNPJ/

@@ -5,11 +5,9 @@ description = "Dados CNPJ Receita Federal do Brasil"
 authors = ["Daniel Komesu <danielkomesu@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-beautifulsoup4 = "^4.11.1"
-httpx = "^0.23.0"
-lxml = "^4.9.0"
-tqdm = "^4.64.0"
+python = ">=3.10"
+httpx = "*"
+tqdm = "*"
 
 [build-system]
 requires = ["poetry-core"]
