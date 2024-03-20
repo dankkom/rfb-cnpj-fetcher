@@ -57,6 +57,21 @@ def download_file(
         pb.close()
 
 
+def robust_download_file(
+    file_meta: dict,
+    client: httpx.Client,
+) -> bytes:
+    """Retry download if an error occurs."""
+    while True:
+        try:
+            download_file(file_meta, client)
+            break
+        except httpx.HTTPError as e:
+            print("Status code:", e.response.status_code)
+            print(f"Error downloading file {file_meta['name']}. Retrying...")
+            continue
+
+
 def fetch_dataset(dataset: str, data_dir: Path):
     client = httpx.Client()
     fn_pattern = meta.datasets[dataset].get("fn_pattern")
@@ -69,7 +84,7 @@ def fetch_dataset(dataset: str, data_dir: Path):
             file_meta |= {"partition": partition}
         filepath = get_filepath(data_dir=data_dir, **file_meta)
         file_meta |= {"filepath": filepath}
-        download_file(file_meta, client)
+        robust_download_file(file_meta, client)
     client.close()
 
 
@@ -82,7 +97,7 @@ def fetch_auxiliary_tables(auxiliary_table: str, data_dir: Path):
         }
         filepath = get_filepath(data_dir=data_dir, **file_meta)
         file_meta |= {"filepath": filepath}
-        download_file(file_meta, client)
+        robust_download_file(file_meta, client)
     client.close()
 
 
@@ -95,7 +110,7 @@ def fetch_tax_regime(tax_regime: str, data_dir: Path):
         }
         filepath = get_filepath(data_dir=data_dir, **file_meta)
         file_meta |= {"filepath": filepath}
-        download_file(file_meta, client)
+        robust_download_file(file_meta, client)
     client.close()
 
 
@@ -108,5 +123,5 @@ def fetch_docs(doc: str, data_dir: Path):
         }
         filepath = get_filepath(data_dir=data_dir, **file_meta)
         file_meta |= {"filepath": filepath}
-        download_file(file_meta, client)
+        robust_download_file(file_meta, client)
     client.close()
