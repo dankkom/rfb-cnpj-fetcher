@@ -1,6 +1,7 @@
 import datetime
 from pathlib import Path
 import re
+import time
 from urllib.parse import unquote
 
 import httpx
@@ -67,8 +68,12 @@ def robust_download_file(
             download_file(file_meta, client)
             break
         except httpx.HTTPError as e:
-            print("Status code:", e.response.status_code)
-            print(f"Error downloading file {file_meta['name']}. Retrying...")
+            print(
+                "Status code:",
+                e.response.status_code,
+                f"\nError downloading file {file_meta['name']}. Retrying in 5 seconds...",
+            )
+            time.sleep(5)
             continue
 
 
