@@ -71,11 +71,9 @@ def robust_download_file(
         try:
             download_file(file_meta, client)
             break
-        except httpx.HTTPError as e:
+        except httpx.TimeoutException:
             print(
-                "Status code:",
-                e.response.status_code,
-                f"\nError downloading file {file_meta['name']}. Retrying in 5 seconds...",
+                f"Timeout downloading file {file_meta['name']}. Retrying in 5 seconds...",
             )
             time.sleep(5)
             continue
