@@ -102,6 +102,8 @@ def fetch_dataset(dataset: str, data_dir: Path):
                 partition, = re.search(fn_pattern, file_meta["name"]).groups()
                 file_meta |= {"partition": partition}
             filepath = get_filepath(data_dir=data_dir, **file_meta)
+            if filepath.exists() and filepath.stat().st_size == file_meta["file_size"]:
+                continue
             file_meta |= {"filepath": filepath}
             robust_download_file(file_meta, client)
         date_ref = date_ref.replace(month=date_ref.month + 1)
@@ -119,6 +121,8 @@ def fetch_auxiliary_tables(auxiliary_table: str, data_dir: Path):
             "date_ref": date_ref,
         }
         filepath = get_filepath(data_dir=data_dir, **file_meta)
+        if filepath.exists() and filepath.stat().st_size == file_meta["file_size"]:
+            continue
         file_meta |= {"filepath": filepath}
         robust_download_file(file_meta, client)
         date_ref = date_ref.replace(month=date_ref.month + 1)
@@ -133,6 +137,8 @@ def fetch_tax_regime(tax_regime: str, data_dir: Path):
             "group": "regimes-tributarios",
         }
         filepath = get_filepath(data_dir=data_dir, **file_meta)
+        if filepath.exists() and filepath.stat().st_size == file_meta["file_size"]:
+            continue
         file_meta |= {"filepath": filepath}
         robust_download_file(file_meta, client)
     client.close()
@@ -146,6 +152,8 @@ def fetch_docs(doc: str, data_dir: Path):
             "group": "documentacao",
         }
         filepath = get_filepath(data_dir=data_dir, **file_meta)
+        if filepath.exists() and filepath.stat().st_size == file_meta["file_size"]:
+            continue
         file_meta |= {"filepath": filepath}
         robust_download_file(file_meta, client)
     client.close()
