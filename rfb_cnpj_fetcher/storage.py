@@ -21,7 +21,10 @@ def get_filename(**file_meta) -> str:
 def get_filepath(data_dir: Path, **file_meta) -> Path:
     filename = get_filename(**file_meta)
     if group := file_meta.get("group"):
-        filepath = data_dir / group / file_meta["dataset"] / filename
+        dest_dir = data_dir / group / file_meta["dataset"]
     else:
-        filepath = data_dir / file_meta["dataset"] / filename
+        dest_dir = data_dir / file_meta["dataset"]
+    if file_meta.get("date_ref"):
+        dest_dir = dest_dir / f"{file_meta['date_ref']:Y%m}"
+    filepath = dest_dir / filename
     return filepath

@@ -90,6 +90,7 @@ def fetch_dataset(dataset: str, data_dir: Path):
             url = datasets[dataset]["url_format"].format(date_ref=date_ref, i=i)
             file_meta = get_file_metadata(url) | {
                 "dataset": dataset,
+                "date_ref": date_ref,
             }
             if file_meta["file_size"] < 1000:
                 raise ValueError(f"File {file_meta['name']} is empty.")
@@ -111,6 +112,7 @@ def fetch_auxiliary_tables(auxiliary_table: str, data_dir: Path):
         file_meta = get_file_metadata(url) | {
             "dataset": auxiliary_table,
             "group": "tabelas-auxiliares",
+            "date_ref": date_ref,
         }
         filepath = get_filepath(data_dir=data_dir, **file_meta)
         file_meta |= {"filepath": filepath}
