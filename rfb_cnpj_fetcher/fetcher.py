@@ -77,6 +77,12 @@ def robust_download_file(
             )
             time.sleep(5)
             continue
+        except httpx.RemoteProtocolError:
+            print(
+                f"Protocol error downloading file {file_meta['name']}. Retrying in 5 seconds...",
+            )
+            time.sleep(5)
+            continue
 
 
 def fetch_dataset(dataset: str, data_dir: Path):
