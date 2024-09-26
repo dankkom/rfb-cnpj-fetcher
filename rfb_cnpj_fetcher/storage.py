@@ -25,6 +25,6 @@ def get_filepath(data_dir: Path, **file_meta) -> Path:
     else:
         dest_dir = data_dir / file_meta["dataset"]
     if file_meta.get("date_ref"):
-        dest_dir = dest_dir / f"{file_meta['date_ref']:Y%m}"
+        dest_dir = dest_dir / f"{file_meta['date_ref']:%Y%m}"
     filepath = dest_dir / filename
     return filepath
