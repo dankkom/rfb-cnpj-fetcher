@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from rfb_cnpj_fetcher import fetcher, meta
+from rfb_cnpj_fetcher import constants, fetcher
 
 
 def get_args():
@@ -17,16 +17,16 @@ def main():
     args = get_args()
     data_dir = args.data_dir
 
-    for dataset in meta.datasets:
+    for dataset in constants.datasets:
         fetcher.fetch_dataset(dataset, data_dir=data_dir)
 
-    for auxiliary_table in meta.auxiliary_tables:
+    for auxiliary_table in constants.auxiliary_tables:
         fetcher.fetch_auxiliary_tables(auxiliary_table, data_dir=data_dir)
 
-    for tax_regime in meta.tax_regimes:
+    for tax_regime in constants.tax_regimes:
         fetcher.fetch_tax_regime(tax_regime, data_dir=data_dir)
 
-    for doc in meta.docs:
+    for doc in constants.docs:
         fetcher.fetch_docs(doc, data_dir=data_dir)
 
 

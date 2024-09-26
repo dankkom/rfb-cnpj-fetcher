@@ -1,61 +1,43 @@
 BASE_URL = "https://dadosabertos.rfb.gov.br/CNPJ"
 
+INITIAL_DATE = "2024-05"
+
 datasets = {
     "empresas": {
-        "urls": [
-            BASE_URL + f"/Empresas{i}.zip" for i in range(10)
-        ],
+        "url_format": BASE_URL + "/dados_abertos_cnpj/{date_ref:%Y-%m}/Empresas{i}.zip",
         "fn_pattern": r"Empresas(\d)",
     },
     "estabelecimentos": {
-        "urls": [
-            BASE_URL + f"/Estabelecimentos{i}.zip" for i in range(10)
-        ],
+        "url_format": BASE_URL + "/dados_abertos_cnpj/{date_ref:%Y-%m}/Estabelecimentos{i}.zip",
         "fn_pattern": r"Estabelecimentos(\d)",
     },
     "socios": {
-        "urls": [
-            BASE_URL + f"/Socios{i}.zip" for i in range(10)
-        ],
+        "url_format": BASE_URL + "/dados_abertos_cnpj/{date_ref:%Y-%m}/Socios{i}.zip",
         "fn_pattern": r"Socios(\d)",
     },
     "simples": {
-        "urls": [
-            BASE_URL + "/Simples.zip",
-        ],
+        "url_format": BASE_URL + "/dados_abertos_cnpj/{date_ref:%Y-%m}/Simples.zip",
     },
 }
 
 auxiliary_tables = {
     "cnaes": {
-        "urls": [
-            BASE_URL + "/Cnaes.zip",
-        ],
+        "url_format": BASE_URL + "/dados_abertos_cnpj/{date_ref:%Y-%m}/Cnaes.zip",
     },
     "motivos": {
-        "urls": [
-            BASE_URL + "/Motivos.zip",
-        ],
+        "url_format": BASE_URL + "/dados_abertos_cnpj/{date_ref:%Y-%m}/Motivos.zip",
     },
     "municipios": {
-        "urls": [
-            BASE_URL + "/Municipios.zip",
-        ],
+        "url_format": BASE_URL + "/dados_abertos_cnpj/{date_ref:%Y-%m}/Municipios.zip",
     },
     "naturezas": {
-        "urls": [
-            BASE_URL + "/Naturezas.zip",
-        ],
+        "url_format": BASE_URL + "/dados_abertos_cnpj/{date_ref:%Y-%m}/Naturezas.zip",
     },
     "paises": {
-        "urls": [
-            BASE_URL + "/Paises.zip",
-        ],
+        "url_format": BASE_URL + "/dados_abertos_cnpj/{date_ref:%Y-%m}/Paises.zip",
     },
     "qualificacoes": {
-        "urls": [
-            BASE_URL + "/Qualificacoes.zip",
-        ],
+        "url_format": BASE_URL + "/dados_abertos_cnpj/{date_ref:%Y-%m}/Qualificacoes.zip",
     },
 }
 

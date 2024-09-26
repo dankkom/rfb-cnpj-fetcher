@@ -7,8 +7,12 @@ from urllib.parse import unquote
 import httpx
 from tqdm import tqdm
 
-from . import meta
+from .constants import INITIAL_DATE, datasets, auxiliary_tables, tax_regimes, docs
 from .storage import get_filepath
+
+
+START_DATE = datetime.datetime.strptime(INITIAL_DATE, "%Y-%m")
+TODAY = datetime.datetime.now()
 
 
 def get_file_metadata(url: str) -> dict:
@@ -78,24 +82,32 @@ def robust_download_file(
 
 
 def fetch_dataset(dataset: str, data_dir: Path):
-    client = httpx.Client()
-    fn_pattern = meta.datasets[dataset].get("fn_pattern")
-    for url in meta.datasets[dataset]["urls"]:
-        file_meta = get_file_metadata(url) | {
-            "dataset": dataset,
-        }
-        if fn_pattern:
-            partition, = re.search(fn_pattern, file_meta["name"]).groups()
-            file_meta |= {"partition": partition}
-        filepath = get_filepath(data_dir=data_dir, **file_meta)
-        file_meta |= {"filepath": filepath}
-        robust_download_file(file_meta, client)
+    client = httpx.Client(timeout=600)
+    fn_pattern = datasets[dataset].get("fn_pattern")
+    date_ref = START_DATE
+    while date_ref < TODAY:
+        for i in range(10):
+            url = datasets[dataset]["url_format"].format(date_ref=date_ref, i=i)
+            file_meta = get_file_metadata(url) | {
+                "dataset": dataset,
+            }
+            if file_meta["file_size"] < 1000:
+                raise ValueError(f"File {file_meta['name']} is empty.")
+            if fn_pattern:
+                partition, = re.search(fn_pattern, file_meta["name"]).groups()
+                file_meta |= {"partition": partition}
+            filepath = get_filepath(data_dir=data_dir, **file_meta)
+            file_meta |= {"filepath": filepath}
+            robust_download_file(file_meta, client)
+        date_ref = date_ref.replace(month=date_ref.month + 1)
     client.close()
 
 
 def fetch_auxiliary_tables(auxiliary_table: str, data_dir: Path):
-    client = httpx.Client()
-    for url in meta.auxiliary_tables[auxiliary_table]["urls"]:
+    client = httpx.Client(timeout=600)
+    date_ref = START_DATE
+    while date_ref < TODAY:
+        url = auxiliary_tables[auxiliary_table]["url_format"].format(date_ref=date_ref)
         file_meta = get_file_metadata(url) | {
             "dataset": auxiliary_table,
             "group": "tabelas-auxiliares",
@@ -103,12 +115,13 @@ def fetch_auxiliary_tables(auxiliary_table: str, data_dir: Path):
         filepath = get_filepath(data_dir=data_dir, **file_meta)
         file_meta |= {"filepath": filepath}
         robust_download_file(file_meta, client)
+        date_ref = date_ref.replace(month=date_ref.month + 1)
     client.close()
 
 
 def fetch_tax_regime(tax_regime: str, data_dir: Path):
-    client = httpx.Client()
-    for url in meta.tax_regimes[tax_regime]["urls"]:
+    client = httpx.Client(timeout=600)
+    for url in tax_regimes[tax_regime]["urls"]:
         file_meta = get_file_metadata(url) | {
             "dataset": tax_regime,
             "group": "regimes-tributarios",
@@ -120,8 +133,8 @@ def fetch_tax_regime(tax_regime: str, data_dir: Path):
 
 
 def fetch_docs(doc: str, data_dir: Path):
-    client = httpx.Client()
-    for url in meta.docs[doc]["urls"]:
+    client = httpx.Client(timeout=600)
+    for url in docs[doc]["urls"]:
         file_meta = get_file_metadata(url) | {
             "dataset": doc,
             "group": "documentacao",
