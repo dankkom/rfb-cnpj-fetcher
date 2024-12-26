@@ -106,7 +106,10 @@ def fetch_dataset(dataset: str, data_dir: Path):
                 continue
             file_meta |= {"filepath": filepath}
             robust_download_file(file_meta, client)
-        date_ref = date_ref.replace(month=date_ref.month + 1)
+        if date_ref.month == 12:
+            date_ref = date_ref.replace(year=date_ref.year + 1, month=1)
+        else:
+            date_ref = date_ref.replace(month=date_ref.month + 1)
     client.close()
 
 
@@ -125,7 +128,10 @@ def fetch_auxiliary_tables(auxiliary_table: str, data_dir: Path):
             continue
         file_meta |= {"filepath": filepath}
         robust_download_file(file_meta, client)
-        date_ref = date_ref.replace(month=date_ref.month + 1)
+        if date_ref.month == 12:
+            date_ref = date_ref.replace(year=date_ref.year + 1, month=1)
+        else:
+            date_ref = date_ref.replace(month=date_ref.month + 1)
     client.close()
 
 

@@ -1,6 +1,6 @@
-BASE_URL = "https://dadosabertos.rfb.gov.br/CNPJ"
+BASE_URL = "https://arquivos.receitafederal.gov.br/dados/cnpj"
 
-INITIAL_DATE = "2024-05"
+INITIAL_DATE = "2023-05"
 
 datasets = {
     "empresas": {
